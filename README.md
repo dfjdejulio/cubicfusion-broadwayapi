@@ -13,7 +13,7 @@ Usage
 
 **Prerequisites**:
 
-- A Broadway S2/T box exists in the local network and is already setup and running properly.
+- A Broadway S2/T box exists in the local network, is already setup and running :)
 
 **Installation & Setup**:
 
