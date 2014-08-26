@@ -26,8 +26,10 @@ Links
 
 OpenELEC 			
 	- http://openelec.tv/
+	
 XBMC 				
 	- http://xbmc.org/
+	
 IPTV Simple Client 	
 	- http://wiki.xbmc.org/index.php?title=Add-on:IPTV_Simple_Client
 
