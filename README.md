@@ -5,7 +5,7 @@ BroadwayAPI (PHP)
 About
 -----
 
-Simple way to extract / export your Broadway channel playlist and current EPG using PHP.
+Simple way to extract / export your PCTV Broadway HD-S2 channel playlist and current EPG using PHP.
 These can be reused in OpenELEC/ XBMC / Kodi in combination with the IPTV Simple Client
 
 Usage
