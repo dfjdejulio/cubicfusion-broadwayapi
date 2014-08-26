@@ -3,7 +3,7 @@ class BroadwayAPI{
 		# Broadway network IP
 		public $stream_ip		= "192.168.1.46";
 		
-		# Stream Profiles (default is empty = raw stream)
+		# Broadway stream profiles  / stream quality (default is empty = raw stream)
 		# m2ts.
 		#		 80k.LR              2300k.LC               2300k.MC               2000k.HD
 		# 		150k.LR              4300k.LC               4300k.MC               4000k.HD
@@ -11,10 +11,10 @@ class BroadwayAPI{
 		# 		300k.MR             11300k.LC               8300k.MC               8000k.HD
 		# 		500k.MR             15300k.LC              15300k.MC              15000k.HD
 		# 		700k.MR
-		#		1000k.MR
-		     
+		#		1000k.MR		     
 		public $stream_profile 	= ""; // m2ts.4000K.HD
 		
+		#Broadway channellist to use
 		public $channel_list	= 1;
 				
 		static $channels;
@@ -24,15 +24,24 @@ class BroadwayAPI{
 		function __construct() {
 			
 		}
-		
+		/*
+			Load Broadway Channellist / JSON
+		*/
 		function getChannelList(){
 			return $this->getData("http://".$this->stream_ip."/TVC/user/data/tv/channellists/".$this->channel_list);	
 		}
 		
+		/*
+			Load Broadway Channel EPG / JSON
+		*/
+
 		function getChannelEPG($id){
 			return $this->getData("http://".$this->stream_ip."/TVC/user/data/epg/?ids=".$id."&extended=1");	
 		}
 		
+		/*
+			Cleanup and combine channel list / epg
+		*/
 		function getChannels(){
 			
 			if ($this->channels !== NULL)
@@ -52,7 +61,12 @@ class BroadwayAPI{
 			$this->channels =  $data;
 			return 	 $data;
 		}
-		
+
+		/*
+			Build Playlist
+			- Images use the name of the channel with empty spaces or slashes replaced width "-"
+			- In XBMC the image folder is defined in the IPTV Simple PVR Addon
+		*/
 		function buildPlaylist(){
 			
 			 $data = $this->getChannels();
@@ -66,7 +80,10 @@ class BroadwayAPI{
 				}
 			$this->playlist = $playlist;
 		}
-		
+
+		/*
+			Export Playlist
+		*/
 		function exportPlaylist($filename = "broadway.m3u"){
 			
 			$this->buildPlaylist();
@@ -74,6 +91,10 @@ class BroadwayAPI{
 			file_put_contents($filename, $this->playlist);	
 		}
 		
+		/*
+			Build EPG
+			- Improvising on the category, as the Broadway EPG does not provide any further information			
+		*/
 		function buildEPG(){
 			
 			$data = $this->getChannels();
@@ -118,6 +139,9 @@ class BroadwayAPI{
  			$this->epg =  $epg;
 		}
 		
+		/*
+			Export EPG
+		*/
 		function exportEPG($filename = "broadway_epg.xml"){
 			
 			$this->buildEPG();
@@ -125,6 +149,9 @@ class BroadwayAPI{
 			file_put_contents($filename, $this->playlist);	
 		}
 		
+		/*
+			Fetch data
+		*/
 		function getData($url){
 			
 			$ch = curl_init();
