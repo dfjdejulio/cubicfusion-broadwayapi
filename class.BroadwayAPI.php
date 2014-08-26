@@ -146,7 +146,7 @@ class BroadwayAPI{
 			
 			$this->buildEPG();
 			
-			file_put_contents($filename, $this->playlist);	
+			file_put_contents($filename, $this->epg);	
 		}
 		
 		/*
