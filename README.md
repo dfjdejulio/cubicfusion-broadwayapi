@@ -22,4 +22,4 @@ See example. A more detailed example will follow.
 License
 -----------
 
-This addon is licensed under the [MIT License](./LICENSE.txt).
+This addon is licensed under the [MIT License](/LICENSE.txt).
