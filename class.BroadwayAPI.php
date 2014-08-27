@@ -175,13 +175,26 @@ class BroadwayAPI{
 			file_put_contents($filename, $this->epg);	
 		}
 		
+		function checkForBroadway(){		
+			
+			$url =  "http://".$this->stream_ip."/TVC/user/data/tv/channellists"; 
+						
+			switch($this->getResponseCode($url)){
+				case 200:
+					return true;
+				break;
+				
+			}	
+			return false;
+			
+		}
 		/* Check, if stream is occupied */
 		
 		function isStreamAvailable(){
 			
 			$data = $this->getChannels(false);
 			
-			$url =  "http://".$this->stream_ip."/basicauth/TVC/Preview?channel=".$data[0]->Id . "&profile=".$this->stream_profile."\n"; 
+			$url =  "http://".$this->stream_ip."/basicauth/TVC/Preview?channel=".$data[0]->Id . "&profile=".$this->stream_profile.""; 
 						
 			switch($this->getResponseCode($url)){
 				case 200:

@@ -6,6 +6,12 @@ $Broadway = new BroadwayAPI();
 
 $listings 	= $Broadway->getChannelListing();
 $config 	= parse_ini_file("config.ini");
+
+$streamAvailable 	= $Broadway->isStreamAvailable();
+$broadwayAvailable 	= $Broadway->checkForBroadway();
+
+echo $broadwayAvailable;
+
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -38,6 +44,14 @@ $config 	= parse_ini_file("config.ini");
  
   </div>
   <div class="jumbotron">
+   <h2>Status</h2>
+   
+   <div class="btn-group">
+  <button type="button" <?php if($broadwayAvailable){echo 'class="btn btn-default"><span class="glyphicon glyphicon glyphicon-ok"></span> Broadway live';}else{ echo 'class="btn-danger"><span class="glyphicon glyphicon glyphicon-remove"></span>Broadway not live' ;} ?></button>
+  <button type="button" <?php if($streamAvailable){echo 'class="btn btn-default"><span class="glyphicon glyphicon glyphicon-ok"></span> Stream available?';}else{echo 'class="btn btn-danger"><span class="glyphicon glyphicon glyphicon-remove"></span> Stream in use' ;}  ?> </button>
+  
+</div>
+  
     <h2>Settings</h2>
     <table class="table table-striped">
       <?php
