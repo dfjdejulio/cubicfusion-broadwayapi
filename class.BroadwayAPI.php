@@ -42,9 +42,9 @@ class BroadwayAPI{
 		/*
 			Cleanup and combine channel list / epg
 		*/
-		function getChannels(){
+		function getChannels($loadEPG=true){
 			
-			if ($this->channels !== NULL)
+			if ($this->channels !== NULL && $loadEPG == true)
         		return $this->channels;
 		
 			$data = array();
@@ -52,9 +52,13 @@ class BroadwayAPI{
 			$list = $this->getChannelList();
 			
 			foreach((array)$list->Channels as $channel){
-				$prep 			= $this->getChannelEPG($channel->Id);
-	 			$entries		= $prep[0]->Entries;
-	 			$channel->EPG 	= $entries;
+				
+				if( $loadEPG == true){
+					$prep 			= $this->getChannelEPG($channel->Id);
+	 				$entries		= $prep[0]->Entries;
+	 				$channel->EPG 	= $entries;
+				}
+				
 				$data[] 		= $channel;
 			}
 			
@@ -69,7 +73,7 @@ class BroadwayAPI{
 		*/
 		function buildPlaylist(){
 			
-			 $data = $this->getChannels();
+			 $data = $this->getChannels(false);
 			 
 			 $playlist = "#EXTM3U\n";
 
@@ -147,6 +151,29 @@ class BroadwayAPI{
 			$this->buildEPG();
 			
 			file_put_contents($filename, $this->epg);	
+		}
+		
+		/* Check, if stream is occupied */
+		
+		function isStreamAvailable(){
+			
+			$data = $this->getChannels(false);
+			
+			$url =  "http://".$this->stream_ip."/basicauth/TVC/Preview?channel=".$data[0]->Id . "&profile=".$this->stream_profile."\n"; 
+			echo $this->getResponseCode($url);
+			
+			switch($this->getResponseCode($url)){
+				case 200:
+				return true;
+				break;
+				
+			}	
+			return false;
+		}
+		
+		function getResponseCode($url) {
+    		$headers = get_headers($url);
+    		return substr($headers[0], 9, 3);
 		}
 		
 		/*
