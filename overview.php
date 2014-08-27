@@ -10,7 +10,6 @@ $config 	= parse_ini_file("config.ini");
 $streamAvailable 	= $Broadway->isStreamAvailable();
 $broadwayAvailable 	= $Broadway->checkForBroadway();
 
-echo $broadwayAvailable;
 
 ?>
 <!DOCTYPE html>
