@@ -23,7 +23,22 @@ class BroadwayAPI{
 		
 		function __construct() {
 			
+			if(file_exists("config.ini")){
+			
+				$config = parse_ini_file("config.ini");
+				
+				$this->stream_ip 		= $config["stream_ip"];
+				$this->stream_profile 	= $config["stream_profile"];
+				$this->channel_list 	= $config["channel_list"];		
+			}
 		}
+		/*
+			Load Broadway channel listing / JSON
+		*/
+		function getChannelListing(){
+			return $this->getData("http://".$this->stream_ip."/TVC/user/data/tv/channellists/");	
+		}
+		
 		/*
 			Load Broadway Channellist / JSON
 		*/
