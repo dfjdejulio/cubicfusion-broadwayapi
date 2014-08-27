@@ -160,11 +160,10 @@ class BroadwayAPI{
 			$data = $this->getChannels(false);
 			
 			$url =  "http://".$this->stream_ip."/basicauth/TVC/Preview?channel=".$data[0]->Id . "&profile=".$this->stream_profile."\n"; 
-			echo $this->getResponseCode($url);
-			
+						
 			switch($this->getResponseCode($url)){
 				case 200:
-				return true;
+					return true;
 				break;
 				
 			}	
