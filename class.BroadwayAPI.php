@@ -36,7 +36,14 @@ class BroadwayAPI{
 			Load Broadway channel listing / JSON
 		*/
 		function getChannelListing(){
-			return $this->getData("http://".$this->stream_ip."/TVC/user/data/tv/channellists/");	
+			$listing =  $this->getData("http://".$this->stream_ip."/TVC/user/data/tv/channellists/");	
+			
+			foreach($listing as $list){
+			
+				$list->Items =  $this->getData("http://".$this->stream_ip."/TVC/user/data/tv/channellists/".$list->Id);	
+				$data[] = $list;	
+			}
+			return $data;
 		}
 		
 		/*
@@ -51,7 +58,7 @@ class BroadwayAPI{
 		*/
 
 		function getChannelEPG($id){
-			return $this->getData("http://".$this->stream_ip."/TVC/user/data/epg/?ids=".$id."&extended=1");	
+			
 		}
 		
 		/*

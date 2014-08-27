@@ -17,7 +17,7 @@ $config 	= parse_ini_file("config.ini");
 </head>
 <body>
 <div class="container"> 
-  <!-- Static navbar -->
+
   <div class="navbar navbar-default" role="navigation">
     <div class="container-fluid">
       <div class="navbar-header">
@@ -33,13 +33,13 @@ $config 	= parse_ini_file("config.ini");
           <li ><a href="https://bitbucket.org/portalzine/broadwayapi/overview" target="_blank">Repository</a></li>
         </ul>
       </div>
-      <!--/.nav-collapse --> 
+     
     </div>
-    <!--/.container-fluid --> 
+ 
   </div>
   <div class="jumbotron">
     <h2>Settings</h2>
-    <table class="table">
+    <table class="table table-striped">
       <?php
 	  foreach($config as $key => $var){
 echo "<tr>
@@ -50,13 +50,15 @@ echo "<tr>
 		?>
     </table>
     <h2>Channellists</h2>
-    <table class="table">
+    <table class="table table-striped">
       <?php
-echo "<tr>
-		<td>ID</td>
-		<td>NAME</td>
-		<td>CHANNELS</td>
-		</tr>";
+echo "<thead><tr>
+
+		<th>ID</td>
+		<th>NAME</td>
+		<th>CHANNELS</td>
+		
+		</tr></thead><tbody>";
 		
 foreach($listings as $list){
 		echo "<tr>
@@ -64,9 +66,61 @@ foreach($listings as $list){
 		<td>".$list->DisplayName."</td>
 		<td>".$list->Count."</td>
 		</tr>";
+		
+		
+		echo "<tr>
+		
+		<td colspan='3'>";
+		foreach($list->Items->Channels as $channel){
+			echo '<span class="label label-primary">'.$channel->DisplayName.'</span> ';
+		}
+		echo "</td>
+		
+		</tr></tbody>";
 }
 ?>
     </table>
+    
+     <h2>Channel Logos</h2>
+    <table class="table table-striped">
+      <?php
+echo "<thead><tr>
+
+		<th>ID</td>
+		<th>NAME</td>
+		<th>CHANNELS</td>
+		
+		</tr></thead><tbody>";
+		
+foreach($listings as $list){
+		echo "<tr>
+		<td>".$list->Id."</td>
+		<td>".$list->DisplayName."</td>
+		<td>".$list->Count."</td>
+		</tr>";
+		
+		
+		
+		foreach($list->Items->Channels as $channel){echo "<tr>
+		
+		<td colspan='2'>";
+			echo '<span class="label label-primary">'.$channel->DisplayName.'</span></td> ';
+			if(file_exists($config['channel_logos'].str_replace('/',"-",str_replace(" ","-",$channel->DisplayName)) .".png")){
+			echo 	"<td class='active'><img width='80' src='/".$config['channel_logos'].str_replace('/',"-",str_replace(" ","-",$channel->DisplayName)) .".png'></td>";
+			}else{
+				echo 	"<td class='danger'>Missing: ".str_replace('/',"-",str_replace(" ","-",$channel->DisplayName)) .".png</td>";
+				}
+		echo "</td></tr>";
+		}
+		
+	
+		
+		echo "</tbody>";
+}
+?>
+    </table>
+    
   </div>
+  <center>&copy; Copyright 2014 <a href="http://www.portalzine.de" target="_blank">portalZINE NMN / Alexander Graef. All rights reserved.</center><br><br>
 </div>
 </body>
