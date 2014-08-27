@@ -47,21 +47,26 @@ $broadwayAvailable 	= $Broadway->checkForBroadway();
    
    <div class="btn-group">
   <button type="button" <?php if($broadwayAvailable){echo 'class="btn btn-default"><span class="glyphicon glyphicon glyphicon-ok"></span> Broadway live';}else{ echo 'class="btn-danger"><span class="glyphicon glyphicon glyphicon-remove"></span>Broadway not live' ;} ?></button>
-  <button type="button" <?php if($streamAvailable){echo 'class="btn btn-default"><span class="glyphicon glyphicon glyphicon-ok"></span> Stream available?';}else{echo 'class="btn btn-danger"><span class="glyphicon glyphicon glyphicon-remove"></span> Stream in use' ;}  ?> </button>
+  <button type="button" <?php if($streamAvailable){echo 'class="btn btn-default"><span class="glyphicon glyphicon glyphicon-ok"></span> Stream available';}else{echo 'class="btn btn-danger"><span class="glyphicon glyphicon glyphicon-remove"></span> Stream in use' ;}  ?> </button>
   
 </div>
-  
+  </div>
+   <div class="jumbotron">
     <h2>Settings</h2>
+    <form role="form">
     <table class="table table-striped">
       <?php
 	  foreach($config as $key => $var){
 echo "<tr>
 		<td>".$key."</td>
-		<td>".$var."</td>		
+		<td><input class='form-control' type='text' value='".$var."'></td>		
 		</tr>";
 	  }
 		?>
     </table>
+    </form>
+    </div>
+     <div class="jumbotron">
     <h2>Channellists</h2>
     <table class="table table-striped">
       <?php
@@ -93,7 +98,8 @@ foreach($listings as $list){
 }
 ?>
     </table>
-    
+    </div>
+     <div class="jumbotron">
      <h2>Channel Logos</h2>
     <table class="table table-striped">
       <?php
@@ -117,7 +123,7 @@ foreach($listings as $list){
 		foreach($list->Items->Channels as $channel){echo "<tr>
 		
 		<td colspan='2'>";
-			echo '<span class="label label-primary">'.$channel->DisplayName.'</span></td> ';
+			echo ''.$channel->DisplayName.'</td> ';
 			if(file_exists($config['channel_logos'].str_replace('/',"-",str_replace(" ","-",$channel->DisplayName)) .".png")){
 			echo 	"<td class='active'><img width='80' src='/".$config['channel_logos'].str_replace('/',"-",str_replace(" ","-",$channel->DisplayName)) .".png'></td>";
 			}else{

@@ -210,6 +210,25 @@ class BroadwayAPI{
     		return substr($headers[0], 9, 3);
 		}
 		
+		function getRedirectsToUri($uri)
+		{
+			$redirects = array();
+			$http = stream_context_create();
+			stream_context_set_params(
+				$http,
+				array(
+					"notification" => function() use (&$redirects)
+					{
+						if (func_get_arg(0) === STREAM_NOTIFY_REDIRECTED) {
+							$redirects[] = func_get_arg(2);
+						}
+					}
+				)
+			);
+			file_get_contents($uri, false, $http);
+			return $redirects;
+		}
+
 		/*
 			Fetch data
 		*/
