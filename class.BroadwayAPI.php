@@ -20,6 +20,7 @@ class BroadwayAPI{
 		static $channels;
 		public $playlist;
 		public $epg;
+		static $channelEPG = array();
 		
 		function __construct() {
 			
@@ -58,7 +59,14 @@ class BroadwayAPI{
 		*/
 
 		function getChannelEPG($id){
-			return $this->getData("http://".$this->stream_ip."/TVC/user/data/epg/?ids=" .$id.  "&extended=1");	
+			if ($this->channelEPG[$id] !== NULL  )
+        		return $this->channelEPG[$id];
+			
+			$data = $this->getData("http://".$this->stream_ip."/TVC/user/data/epg/?ids=" .$id.  "&extended=1");
+			
+			$this->channelEPG[$id] = $data;
+			
+			return $data;	
 		}
 		
 		/*
