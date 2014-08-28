@@ -5,8 +5,8 @@ include("class.BroadwayAPI.php");
 $Broadway = new BroadwayAPI();
 
 $listings 	= $Broadway->getChannelListing();
-$config 	= parse_ini_file("config.ini");
-$rename 	= parse_ini_file("rename.ini");
+$config 	= $Broadway->config;
+$rename 	= $Broadway->rename;
 
 
 $streamAvailable 	= $Broadway->isStreamAvailable();
@@ -56,62 +56,59 @@ $( document ).ready(function() {
 </script>
 <style>
 .spinner {
-  margin: 50px auto;
-  width: 50px;
-  height: 30px;
-  text-align: center;
-  font-size: 10px;
-  display: none;
+	margin: 50px auto;
+	width: 50px;
+	height: 30px;
+	text-align: center;
+	font-size: 10px;
+	display: none;
 }
-
 .spinner > div {
-  background-color: #333;
-  height: 100%;
-  width: 6px;
-  display: inline-block;
-  
-  -webkit-animation: stretchdelay 1.2s infinite ease-in-out;
-  animation: stretchdelay 1.2s infinite ease-in-out;
+	background-color: #333;
+	height: 100%;
+	width: 6px;
+	display: inline-block;
+	-webkit-animation: stretchdelay 1.2s infinite ease-in-out;
+	animation: stretchdelay 1.2s infinite ease-in-out;
 }
-
 .spinner .rect2 {
-  -webkit-animation-delay: -1.1s;
-  animation-delay: -1.1s;
+	-webkit-animation-delay: -1.1s;
+	animation-delay: -1.1s;
 }
-
 .spinner .rect3 {
-  -webkit-animation-delay: -1.0s;
-  animation-delay: -1.0s;
+	-webkit-animation-delay: -1.0s;
+	animation-delay: -1.0s;
 }
-
 .spinner .rect4 {
-  -webkit-animation-delay: -0.9s;
-  animation-delay: -0.9s;
+	-webkit-animation-delay: -0.9s;
+	animation-delay: -0.9s;
 }
-
 .spinner .rect5 {
-  -webkit-animation-delay: -0.8s;
-  animation-delay: -0.8s;
+	-webkit-animation-delay: -0.8s;
+	animation-delay: -0.8s;
 }
-
-@-webkit-keyframes stretchdelay {
-  0%, 40%, 100% { -webkit-transform: scaleY(0.4) }  
-  20% { -webkit-transform: scaleY(1.0) }
+ @-webkit-keyframes stretchdelay {
+ 0%, 40%, 100% {
+-webkit-transform: scaleY(0.4)
 }
-
-@keyframes stretchdelay {
-  0%, 40%, 100% { 
-    transform: scaleY(0.4);
-    -webkit-transform: scaleY(0.4);
-  }  20% { 
-    transform: scaleY(1.0);
-    -webkit-transform: scaleY(1.0);
-  }
+ 20% {
+-webkit-transform: scaleY(1.0)
+}
+}
+ @keyframes stretchdelay {
+ 0%, 40%, 100% {
+ transform: scaleY(0.4);
+ -webkit-transform: scaleY(0.4);
+}
+20% {
+ transform: scaleY(1.0);
+ -webkit-transform: scaleY(1.0);
+}
 }
 </style>
 </head>
-<body>
-<div class="container"> 
+<body><br>
+<div class="container">
   <div class="navbar navbar-default" role="navigation">
     <div class="container-fluid">
       <div class="navbar-header">
@@ -119,7 +116,7 @@ $( document ).ready(function() {
         <a class="navbar-brand" href="#">BroadwayAPI (PHP)</a> </div>
       <div class="navbar-collapse collapse">
         <ul class="nav navbar-nav">
-          <li ><a href="<?php echo "http://".$Broadway->stream_ip; ?>" target="_blank">Your Broadway</a></li>
+          <li ><a href="<?php echo "http://".$Broadway->stream_ip; ?>" target="_blank">LiveTV</a></li>
           <li><a href="http://<?php echo "http://".$Broadway->stream_ip; ?>/TVC.1343/ui/broadway/Admin.html">Admin</a></li>
           <li><a href="http://<?php echo "http://".$Broadway->stream_ip; ?>/TVC.1343/ui/Settings.html">Settings</a></li>
           <li><a href="#" class="updateLocalFiles">Update Files</a></li>
@@ -128,32 +125,52 @@ $( document ).ready(function() {
           <li ><a href="https://bitbucket.org/portalzine/broadwayapi/overview" target="_blank">Repository</a></li>
         </ul>
       </div>
-     
     </div>
- 
   </div>
   <div class="spinner">
-  <div class="rect1"></div>
-  <div class="rect2"></div>
-  <div class="rect3"></div>
-  <div class="rect4"></div>
-  <div class="rect5"></div>
-</div>
-
-  <div class="jumbotron">
-   <h2>Status</h2>
-   
-   <div class="btn-group">
-  <button type="button" <?php if($broadwayAvailable){echo 'class="btn btn-default"><span class="glyphicon glyphicon glyphicon-ok"></span> Broadway live';}else{ echo 'class="btn-danger"><span class="glyphicon glyphicon glyphicon-remove"></span>Broadway not live' ;} ?></button>
-  <button type="button" <?php if($streamAvailable){echo 'class="btn btn-default"><span class="glyphicon glyphicon glyphicon-ok"></span> Stream available';}else{echo 'class="btn btn-danger"><span class="glyphicon glyphicon glyphicon-remove"></span> Stream in use' ;}  ?> </button>
-  
-</div>
+    <div class="rect1"></div>
+    <div class="rect2"></div>
+    <div class="rect3"></div>
+    <div class="rect4"></div>
+    <div class="rect5"></div>
   </div>
-   <div class="jumbotron">
-    <h2>Settings</h2>
-    <form role="form">
-    <table class="table table-striped">
-      <?php
+  <ul class="nav nav-tabs" role="tablist">
+    <li class="active"><a href="#home" role="tab" data-toggle="tab">Home</a></li>
+    <li><a href="#setting" role="tab" data-toggle="tab">Settings</a></li>
+    <li><a href="#list" role="tab" data-toggle="tab">Channel Lists</a></li>
+    <li><a href="#logos" role="tab" data-toggle="tab">Channels & Logos</a></li>
+  </ul>
+  <div class="tab-content">
+    <div class="tab-pane active" id="home">
+      <div class="jumbotron">
+        <h2>Status</h2>
+        <div class="btn-group"> <button type="button" <?php if($broadwayAvailable){echo 'class="btn btn-default"><span class="glyphicon glyphicon glyphicon-ok"></span> Broadway live';}else{ echo 'class="btn-danger"><span class="glyphicon glyphicon glyphicon-remove"></span>Broadway not live' ;} ?>
+          </button>
+          <button type="button" <?php if($streamAvailable){echo 'class="btn btn-default"><span class="glyphicon glyphicon glyphicon-ok"></span> Stream available';}else{echo 'class="btn btn-danger"><span class="glyphicon glyphicon glyphicon-remove"></span> Stream in use' ;}  ?> 
+          </button>
+        </div>
+        <br><br>
+         <h2>Exports</h2>
+        <table class="table table-striped">
+         <tr>
+              <td>Playlist (m3u)<br>
+                <span class="label label-primary"><?php echo date("d.m.Y H:i:s.", filectime("broadway.m3u")); ?></span></td>
+              <td><input class='form-control' type='text' value='http://<?php echo $_SERVER["SERVER_NAME"]; ?>/broadway.m3u'></td>
+            </tr>
+            <tr>
+              <td>XMLTV<br>
+                <span class="label label-primary"> <?php echo date("d.m.Y H:i:s.", filectime("broadway_epg.xml")); ?></span></td>
+              <td><input class='form-control' type='text' value='http://<?php echo $_SERVER["SERVER_NAME"]; ?>/broadway_epg.xml'></td>
+            </tr>
+        </table>
+      </div>
+    </div>
+    <div class="tab-pane" id="setting">
+      <div class="jumbotron">
+        <h2>Settings</h2>
+        <form role="form">
+          <table class="table table-striped">
+            <?php
 	  foreach($config as $key => $var){
 echo "<tr>
 		<td>".$key."</td>
@@ -161,21 +178,16 @@ echo "<tr>
 		</tr>";
 	  }
 		?>
-        <tr><td>Playlist (m3u)<br>
-        <span class="label label-primary"><?php echo date("d.m.Y H:i:s.", filectime("broadway.m3u")); ?></span>
-</td>
-        <td><input class='form-control' type='text' value='http://<?php echo $_SERVER["SERVER_NAME"]; ?>/broadway.m3u'></td></tr>
-        <tr><td>XMLTV<br>
-        <span class="label label-primary"> <?php echo date("d.m.Y H:i:s.", filectime("broadway_epg.xml")); ?></span>
-</td>
-        <td><input class='form-control' type='text' value='http://<?php echo $_SERVER["SERVER_NAME"]; ?>/broadway_epg.xml'></td></tr>
-    </table>
-    </form>
+           
+          </table>
+        </form>
+      </div>
     </div>
-     <div class="jumbotron">
-    <h2>Channellists</h2>
-    <table class="table table-striped">
-      <?php
+    <div class="tab-pane" id="list">
+      <div class="jumbotron">
+        <h2>Channellists</h2>
+        <table class="table table-striped">
+          <?php
 echo "<thead><tr>
 
 		<th>ID</td>
@@ -185,7 +197,7 @@ echo "<thead><tr>
 		</tr></thead><tbody>";
 		
 foreach($listings as $list){
-		echo "<tr>
+		echo "<tr class='success'>
 		<td>".$list->Id."</td>
 		<td>".$list->DisplayName."</td>
 		<td>".$list->Count."</td>
@@ -203,14 +215,17 @@ foreach($listings as $list){
 		</tr></tbody>";
 }
 ?>
-    </table>
+        </table>
+      </div>
     </div>
-     <div class="jumbotron">
-     <h2>Channel Logos</h2>
-    <table class="table table-striped">
-    <form id="logoForm">
-      <?php
-echo "<thead><tr>
+    <div class="tab-pane" id="logos">
+      <div class="jumbotron">
+        <h2>Channel Logos</h2>
+        <table class="table table-striped">
+            <form id="logoForm">
+          
+          <?php
+echo "<thead><tr >
 
 		<th>ID</td>
 		<th>NAME</td>
@@ -219,7 +234,7 @@ echo "<thead><tr>
 		</tr></thead><tbody>";
 		
 foreach($listings as $list){
-		echo "<tr>
+		echo "<tr class='success'>
 		<td>".$list->Id."</td>
 		<td>".$list->DisplayName."</td>
 		<td>".$list->Count."</td>
@@ -246,9 +261,15 @@ foreach($listings as $list){
 		echo "</tbody>";
 }
 ?>
-    </table></form>
-    
+        </table>
+        </form>
+      </div>
+    </div>
   </div>
-  <center>&copy; Copyright 2014 <a href="http://www.portalzine.de" target="_blank">portalZINE NMN / Alexander Graef. All rights reserved.</center><br><br>
+  <center>
+    &copy; Copyright 2014 <a href="http://www.portalzine.de" target="_blank">portalZINE NMN / Alexander Graef. All rights reserved.
+  </center>
+  <br>
+  <br>
 </div>
 </body>

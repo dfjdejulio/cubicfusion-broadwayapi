@@ -20,6 +20,8 @@ class BroadwayAPI{
 		static $channels;
 		public $playlist;
 		public $epg;
+		public $rename;
+		public $config;
 		static $channelEPG = array();
 		
 		function __construct() {
@@ -27,10 +29,15 @@ class BroadwayAPI{
 			if(file_exists("config.ini")){
 			
 				$config = parse_ini_file("config.ini");
+				$this->config = $config;
 				
 				$this->stream_ip 		= $config["stream_ip"];
 				$this->stream_profile 	= $config["stream_profile"];
 				$this->channel_list 	= $config["channel_list"];		
+			}
+			
+			if(file_exists("config.ini")){
+				$this->rename = parse_ini_file("rename.ini");
 			}
 		}
 		/*
@@ -108,7 +115,7 @@ class BroadwayAPI{
 
                 foreach($data as $d ){
                    
-                        $playlist .="#EXTINF:-1 tvg-logo=\"".$this->cleanString($d->DisplayName) .".png\", ".$d->DisplayName ."\n";
+                        $playlist .="#EXTINF:-1 tvg-logo=\"".$this->cleanString($d->DisplayName) .".png\", ".$this->renameChannel($d->DisplayName) ."\n";
                         $playlist .=  "http://".$this->stream_ip."/basicauth/TVC/Preview?channel=".$d->Id . "&profile=".$this->stream_profile."\n";
 				}
 				
@@ -142,7 +149,7 @@ class BroadwayAPI{
 
                foreach($data as $d ){
                     $epg .="<channel id=\"".$d->Id . "\">\n";
-                    $epg .=" <display-name>".$d->DisplayName ."</display-name>\n";				
+                    $epg .=" <display-name>".$this->renameChannel($d->DisplayName) ."</display-name>\n";				
                     $epg .="</channel>\n";
 			   }
 			
@@ -177,6 +184,12 @@ class BroadwayAPI{
  			$this->epg =  $epg;
 		}
 		
+		function renameChannel($channel){
+			if(!empty($this->rename[$channel])){
+				return 	trim($this->rename[$channel]);
+			}	
+			return $channel;
+		}
 		/*
 			Export EPG
 		*/
