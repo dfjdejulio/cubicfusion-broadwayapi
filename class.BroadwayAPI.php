@@ -72,9 +72,9 @@ class BroadwayAPI{
 		/*
 			Cleanup and combine channel list / epg
 		*/
-		function getChannels(){
+		function getChannels($addEPG = true){
 			
-			if ($this->channels !== NULL  )
+			if ($this->channels !== NULL && $addEPG != true  )
         		return $this->channels;
 		
 			$data = array();
@@ -82,12 +82,11 @@ class BroadwayAPI{
 			$list = $this->getChannelList();
 			
 			foreach((array)$list->Channels as $channel){
-				
-				
+				if($addEPG === true){
 					$prep 			= $this->getChannelEPG($channel->Id);
 	 				$entries		= $prep[0]->Entries;
 	 				$channel->EPG 	= $entries;
-				
+				}
 				
 				$data[] 		= $channel;
 			}
@@ -103,13 +102,13 @@ class BroadwayAPI{
 		*/
 		function buildPlaylist(){
 			
-			 $data = $this->getChannels();
+			 $data = $this->getChannels(false);
 			 
 			 $playlist = "#EXTM3U\n";
 
                 foreach($data as $d ){
                    
-                        $playlist .="#EXTINF:-1 tvg-logo=\"".str_replace('/',"-",str_replace(" ","-",$d->DisplayName)) .".png\", ".$d->DisplayName ."\n";
+                        $playlist .="#EXTINF:-1 tvg-logo=\"".$this->cleanString($d->DisplayName) .".png\", ".$d->DisplayName ."\n";
                         $playlist .=  "http://".$this->stream_ip."/basicauth/TVC/Preview?channel=".$d->Id . "&profile=".$this->stream_profile."\n";
 				}
 			$this->playlist = $playlist;
@@ -131,7 +130,7 @@ class BroadwayAPI{
 		*/
 		function buildEPG(){
 			
-			$data = $this->getChannels();
+			$data = $this->getChannels(true);
 			
 			$epg ="<?xml version=\"1.0\" encoding=\"UTF-8\" ?>\n";
             $epg .="<tv>\n";
@@ -236,7 +235,12 @@ class BroadwayAPI{
 			file_get_contents($uri, false, $http);
 			return $redirects;
 		}
-
+		
+		function cleanString($string){
+  			 $upas = Array("ä" => "ae", "ü" => "ue", "ö" => "oe", "Ä" => "Ae", "Ü" => "Ue", "Ö" => "Oe", "/"=> "-"," "=> "-"); 
+ 			 return  strtr($string, $upas);
+  }
+		
 		/*
 			Fetch data
 		*/

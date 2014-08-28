@@ -10,6 +10,21 @@ $config 	= parse_ini_file("config.ini");
 $streamAvailable 	= $Broadway->isStreamAvailable();
 $broadwayAvailable 	= $Broadway->checkForBroadway();
 
+if(!empty($_POST['build'])){
+	header("content-type:application/json");
+	
+	// Save playlist to file
+	$Broadway->exportPlaylist("broadway.m3u");
+
+	// Save EPG data to file
+	$Broadway->exportEPG("broadway_epg.xml");
+	
+	$return['done'] = 1;
+	$return["json"] = json_encode($return);
+    echo json_encode($return);
+	exit;
+}
+
 
 ?>
 <!DOCTYPE html>
@@ -21,10 +36,80 @@ $broadwayAvailable 	= $Broadway->checkForBroadway();
 <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
 <link rel="stylesheet" href="http://bootswatch.com/flatly/bootstrap.min.css">
 <script src="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
+<script language="javascript">
+$( document ).ready(function() {
+ 
+  $(".updateLocalFiles").click(function(){
+	  $(".spinner").show();
+	  $.ajax({
+  		url: "overview.php",
+		type: 'post',
+        data: {'build': '1'}
+	  }).done(function(data,status) {
+ 		if(data.done == 1) $(".spinner").hide();
+	  });
+  })
+ 
+});
+</script>
+<style>
+.spinner {
+  margin: 100px auto;
+  width: 50px;
+  height: 30px;
+  text-align: center;
+  font-size: 10px;
+  display: none;
+}
+
+.spinner > div {
+  background-color: #333;
+  height: 100%;
+  width: 6px;
+  display: inline-block;
+  
+  -webkit-animation: stretchdelay 1.2s infinite ease-in-out;
+  animation: stretchdelay 1.2s infinite ease-in-out;
+}
+
+.spinner .rect2 {
+  -webkit-animation-delay: -1.1s;
+  animation-delay: -1.1s;
+}
+
+.spinner .rect3 {
+  -webkit-animation-delay: -1.0s;
+  animation-delay: -1.0s;
+}
+
+.spinner .rect4 {
+  -webkit-animation-delay: -0.9s;
+  animation-delay: -0.9s;
+}
+
+.spinner .rect5 {
+  -webkit-animation-delay: -0.8s;
+  animation-delay: -0.8s;
+}
+
+@-webkit-keyframes stretchdelay {
+  0%, 40%, 100% { -webkit-transform: scaleY(0.4) }  
+  20% { -webkit-transform: scaleY(1.0) }
+}
+
+@keyframes stretchdelay {
+  0%, 40%, 100% { 
+    transform: scaleY(0.4);
+    -webkit-transform: scaleY(0.4);
+  }  20% { 
+    transform: scaleY(1.0);
+    -webkit-transform: scaleY(1.0);
+  }
+}
+</style>
 </head>
 <body>
 <div class="container"> 
-
   <div class="navbar navbar-default" role="navigation">
     <div class="container-fluid">
       <div class="navbar-header">
@@ -35,6 +120,7 @@ $broadwayAvailable 	= $Broadway->checkForBroadway();
           <li ><a href="<?php echo "http://".$Broadway->stream_ip; ?>" target="_blank">Your Broadway</a></li>
           <li><a href="http://<?php echo "http://".$Broadway->stream_ip; ?>/TVC.1343/ui/broadway/Admin.html">Admin</a></li>
           <li><a href="http://<?php echo "http://".$Broadway->stream_ip; ?>/TVC.1343/ui/Settings.html">Settings</a></li>
+          <li><a href="#" class="updateLocalFiles">Update Files</a></li>
         </ul>
         <ul class="nav navbar-nav navbar-right">
           <li ><a href="https://bitbucket.org/portalzine/broadwayapi/overview" target="_blank">Repository</a></li>
@@ -44,6 +130,14 @@ $broadwayAvailable 	= $Broadway->checkForBroadway();
     </div>
  
   </div>
+  <div class="spinner">
+  <div class="rect1"></div>
+  <div class="rect2"></div>
+  <div class="rect3"></div>
+  <div class="rect4"></div>
+  <div class="rect5"></div>
+</div>
+
   <div class="jumbotron">
    <h2>Status</h2>
    
@@ -65,6 +159,14 @@ echo "<tr>
 		</tr>";
 	  }
 		?>
+        <tr><td>Playlist (m3u)<br>
+        <span class="label label-primary"><?php echo date("d.m.Y H:i:s.", filectime("broadway.m3u")); ?></span>
+</td>
+        <td><input class='form-control' type='text' value='http://<?php echo $_SERVER["SERVER_NAME"]; ?>/broadway.m3u'></td></tr>
+        <tr><td>XMLTV<br>
+        <span class="label label-primary"> <?php echo date("d.m.Y H:i:s.", filectime("broadway_epg.xml")); ?></span>
+</td>
+        <td><input class='form-control' type='text' value='http://<?php echo $_SERVER["SERVER_NAME"]; ?>/broadway_epg.xml'></td></tr>
     </table>
     </form>
     </div>
@@ -126,10 +228,10 @@ foreach($listings as $list){
 		
 		<td colspan='2'>";
 			echo ''.$channel->DisplayName.'</td> ';
-			if(file_exists($config['channel_logos'].str_replace('/',"-",str_replace(" ","-",$channel->DisplayName)) .".png")){
-			echo 	"<td class='active'><img width='80' src='/".$config['channel_logos'].str_replace('/',"-",str_replace(" ","-",$channel->DisplayName)) .".png'></td>";
+			if(file_exists($config['channel_logos'].$Broadway->cleanString($channel->DisplayName) .".png")){
+			echo 	"<td class='active'><img width='80' src='/".$config['channel_logos'].$Broadway->cleanString($channel->DisplayName) .".png'></td>";
 			}else{
-				echo 	"<td class='danger'>Missing: ".str_replace('/',"-",str_replace(" ","-",$channel->DisplayName)) .".png</td>";
+				echo 	"<td class='danger'>Missing: ".$Broadway->cleanString($channel->DisplayName) .".png</td>";
 				}
 		echo "</td></tr>";
 		}
