@@ -58,15 +58,15 @@ class BroadwayAPI{
 		*/
 
 		function getChannelEPG($id){
-			
+			return $this->getData("http://".$this->stream_ip."/TVC/user/data/epg/?ids=" .$id.  "&extended=1");	
 		}
 		
 		/*
 			Cleanup and combine channel list / epg
 		*/
-		function getChannels($loadEPG=true){
+		function getChannels(){
 			
-			if ($this->channels !== NULL && $loadEPG == true)
+			if ($this->channels !== NULL  )
         		return $this->channels;
 		
 			$data = array();
@@ -75,11 +75,11 @@ class BroadwayAPI{
 			
 			foreach((array)$list->Channels as $channel){
 				
-				if( $loadEPG == true){
+				
 					$prep 			= $this->getChannelEPG($channel->Id);
 	 				$entries		= $prep[0]->Entries;
 	 				$channel->EPG 	= $entries;
-				}
+				
 				
 				$data[] 		= $channel;
 			}
@@ -95,7 +95,7 @@ class BroadwayAPI{
 		*/
 		function buildPlaylist(){
 			
-			 $data = $this->getChannels(false);
+			 $data = $this->getChannels();
 			 
 			 $playlist = "#EXTM3U\n";
 
