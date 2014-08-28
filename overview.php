@@ -144,9 +144,9 @@ $( document ).ready(function() {
         <a class="navbar-brand" href="#">BroadwayAPI (PHP)</a> </div>
       <div class="navbar-collapse collapse">
         <ul class="nav navbar-nav">
-          <li data-toggle="tooltip" data-placement="bottom" title="Broadway LiveTV"><a href="<?php echo "http://".$Broadway->stream_ip; ?>" target="_blank">LiveTV</a></li>
-          <li data-toggle="tooltip" data-placement="bottom" title="Broadway Administration"><a href="http://<?php echo "http://".$Broadway->stream_ip; ?>/TVC.1343/ui/broadway/Admin.html">Admin</a></li>
-          <li data-toggle="tooltip" data-placement="bottom" title="Broadway Settings"><a href="http://<?php echo "http://".$Broadway->stream_ip; ?>/TVC.1343/ui/Settings.html">Settings</a></li>
+          <li data-toggle="tooltip" data-placement="bottom" title="Broadway LiveTV"><a href="http://<?php echo $Broadway->stream_ip; ?>" target="_blank">LiveTV</a></li>
+          <li data-toggle="tooltip" data-placement="bottom" title="Broadway Administration"><a href="http://<?php echo $Broadway->stream_ip; ?>/TVC.1343/ui/broadway/Admin.html" target="_blank">Admin</a></li>
+          <li data-toggle="tooltip" data-placement="bottom" title="Broadway Settings"><a href="http://<?php echo $Broadway->stream_ip; ?>/TVC.1343/ui/Settings.html" target="_blank">Settings</a></li>
           <li data-toggle="tooltip" data-placement="bottom" title="Update Playlist & EPG files"><a href="#" class="updateLocalFiles">Update Files</a></li>
         </ul>
         <ul class="nav navbar-nav navbar-right">
