@@ -53,6 +53,7 @@ $( document ).ready(function() {
   })
  
 });
+
 </script>
 <style>
 .spinner {
@@ -116,10 +117,10 @@ $( document ).ready(function() {
         <a class="navbar-brand" href="#">BroadwayAPI (PHP)</a> </div>
       <div class="navbar-collapse collapse">
         <ul class="nav navbar-nav">
-          <li ><a href="<?php echo "http://".$Broadway->stream_ip; ?>" target="_blank">LiveTV</a></li>
-          <li><a href="http://<?php echo "http://".$Broadway->stream_ip; ?>/TVC.1343/ui/broadway/Admin.html">Admin</a></li>
-          <li><a href="http://<?php echo "http://".$Broadway->stream_ip; ?>/TVC.1343/ui/Settings.html">Settings</a></li>
-          <li><a href="#" class="updateLocalFiles">Update Files</a></li>
+          <li data-toggle="tooltip" data-placement="bottom" title="Broadway LiveTV"><a href="<?php echo "http://".$Broadway->stream_ip; ?>" target="_blank">LiveTV</a></li>
+          <li data-toggle="tooltip" data-placement="bottom" title="Broadway Administration"><a href="http://<?php echo "http://".$Broadway->stream_ip; ?>/TVC.1343/ui/broadway/Admin.html">Admin</a></li>
+          <li data-toggle="tooltip" data-placement="bottom" title="Broadway Settings"><a href="http://<?php echo "http://".$Broadway->stream_ip; ?>/TVC.1343/ui/Settings.html">Settings</a></li>
+          <li data-toggle="tooltip" data-placement="bottom" title="Update Playlist & EPG files"><a href="#" class="updateLocalFiles">Update Files</a></li>
         </ul>
         <ul class="nav navbar-nav navbar-right">
           <li ><a href="https://bitbucket.org/portalzine/broadwayapi/overview" target="_blank">Repository</a></li>
@@ -135,7 +136,7 @@ $( document ).ready(function() {
     <div class="rect5"></div>
   </div>
   <ul class="nav nav-tabs" role="tablist">
-    <li class="active"><a href="#home" role="tab" data-toggle="tab">Home</a></li>
+    <li class="active" ><a href="#home" role="tab" data-toggle="tab">Home</a></li>
     <li><a href="#setting" role="tab" data-toggle="tab">Settings</a></li>
     <li><a href="#list" role="tab" data-toggle="tab">Channel Lists</a></li>
     <li><a href="#logos" role="tab" data-toggle="tab">Channels & Logos</a></li>
@@ -272,4 +273,6 @@ foreach($listings as $list){
   <br>
   <br>
 </div>
+<script>$('.navbar-nav li').tooltip();</script>
 </body>
+</html>
