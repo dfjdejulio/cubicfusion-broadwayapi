@@ -6,6 +6,8 @@ $Broadway = new BroadwayAPI();
 
 $listings 	= $Broadway->getChannelListing();
 $config 	= parse_ini_file("config.ini");
+$extras 	= parse_ini_file("config.ini",1);
+$rename		= $extras['rename'];
 
 $streamAvailable 	= $Broadway->isStreamAvailable();
 $broadwayAvailable 	= $Broadway->checkForBroadway();
@@ -54,7 +56,7 @@ $( document ).ready(function() {
 </script>
 <style>
 .spinner {
-  margin: 100px auto;
+  margin: 50px auto;
   width: 50px;
   height: 30px;
   text-align: center;
@@ -206,6 +208,7 @@ foreach($listings as $list){
      <div class="jumbotron">
      <h2>Channel Logos</h2>
     <table class="table table-striped">
+    <form id="logoForm">
       <?php
 echo "<thead><tr>
 
@@ -227,7 +230,9 @@ foreach($listings as $list){
 		foreach($list->Items->Channels as $channel){echo "<tr>
 		
 		<td colspan='2'>";
-			echo ''.$channel->DisplayName.'</td> ';
+			echo '<h4>'.utf8_decode($channel->DisplayName).'</h4>
+<small>[ID: '.$channel->Id.']</small><br>
+<input class="form-control" type="text" name="rename['.$channel->DisplayName.']" value="'.$rename[$channel->DisplayName].'" placeholder="Rename"></td>';
 			if(file_exists($config['channel_logos'].$Broadway->cleanString($channel->DisplayName) .".png")){
 			echo 	"<td class='active'><img width='80' src='/".$config['channel_logos'].$Broadway->cleanString($channel->DisplayName) .".png'></td>";
 			}else{
@@ -241,7 +246,7 @@ foreach($listings as $list){
 		echo "</tbody>";
 }
 ?>
-    </table>
+    </table></form>
     
   </div>
   <center>&copy; Copyright 2014 <a href="http://www.portalzine.de" target="_blank">portalZINE NMN / Alexander Graef. All rights reserved.</center><br><br>

@@ -111,6 +111,11 @@ class BroadwayAPI{
                         $playlist .="#EXTINF:-1 tvg-logo=\"".$this->cleanString($d->DisplayName) .".png\", ".$d->DisplayName ."\n";
                         $playlist .=  "http://".$this->stream_ip."/basicauth/TVC/Preview?channel=".$d->Id . "&profile=".$this->stream_profile."\n";
 				}
+				
+			// Add radio in the future
+			/*	$playlist .="#EXTINF:-1 radio=\"true\", NDR 2\n";
+				$playlist .="http://ndr-ndr2-nds-mp3.akacast.akamaistream.net/7/400/252763/v1/gnl.akacast.akamaistream.net/ndr_ndr2_nds_mp3";
+			*/
 			$this->playlist = $playlist;
 		}
 
