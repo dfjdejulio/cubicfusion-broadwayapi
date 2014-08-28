@@ -12,19 +12,33 @@ $rename 	= $Broadway->rename;
 $streamAvailable 	= $Broadway->isStreamAvailable();
 $broadwayAvailable 	= $Broadway->checkForBroadway();
 
-if(!empty($_POST['build'])){
-	header("content-type:application/json");
+if(!empty($_POST['action'])){
 	
-	// Save playlist to file
-	$Broadway->exportPlaylist("broadway.m3u");
-
-	// Save EPG data to file
-	$Broadway->exportEPG("broadway_epg.xml");
+	switch($_POST['action']){
+	case "build":
+		header("content-type:application/json");
+		
+		// Save playlist to file
+		$Broadway->exportPlaylist("broadway.m3u");
 	
-	$return['done'] = 1;
-	$return["json"] = json_encode($return);
-    echo json_encode($return);
-	exit;
+		// Save EPG data to file
+		$Broadway->exportEPG("broadway_epg.xml");
+		
+		$return['done'] = 1;
+		$return["json"] = json_encode($return);
+		echo json_encode($return);
+		exit;
+	break;
+	case "check_stream":
+		header("content-type:application/json");		
+		$return['streamAvailable'] = $Broadway->isStreamAvailable();
+		$return["json"] = json_encode($return);
+		echo json_encode($return);
+		exit;
+	
+	break;
+	
+	}
 }
 
 
@@ -40,13 +54,26 @@ if(!empty($_POST['build'])){
 <script src="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
 <script language="javascript">
 $( document ).ready(function() {
- 
+ /*
+  setInterval(function(){
+    $.ajax({ url: "overview.php", type: 'post',
+        data: {'action': 'check_stream'}, success: function(data){
+      
+	   if(data.streamAvailable == true){
+		   	$("#streamStatus").addClass("btn-default").removeClass("btn-danger").text('<span class="glyphicon glyphicon glyphicon-ok"></span> Stream available'+data.streamAvailable);
+	   }else{
+	   	$("#streamStatus").addClass("btn-danger").removeClass("btn-default").text('<span class="glyphicon glyphicon glyphicon-remove"></span> Stream in use'+data.streamAvailable);
+	   }
+        
+    }, dataType: "json"});
+}, 5000);
+*/
   $(".updateLocalFiles").click(function(){
 	  $(".spinner").show();
 	  $.ajax({
   		url: "overview.php",
 		type: 'post',
-        data: {'build': '1'}
+        data: {'action': 'build'}
 	  }).done(function(data,status) {
  		if(data.done == 1) $(".spinner").hide();
 	  });
@@ -145,9 +172,9 @@ $( document ).ready(function() {
     <div class="tab-pane active" id="home">
       <div class="jumbotron">
         <h2>Status</h2>
-        <div class="btn-group"> <button type="button" <?php if($broadwayAvailable){echo 'class="btn btn-default"><span class="glyphicon glyphicon glyphicon-ok"></span> Broadway live';}else{ echo 'class="btn-danger"><span class="glyphicon glyphicon glyphicon-remove"></span>Broadway not live' ;} ?>
+        <div class="btn-group"> <button id="networkStatus" type="button" <?php if($broadwayAvailable){echo 'class="btn btn-default"><span class="glyphicon glyphicon glyphicon-ok"></span> Broadway live';}else{ echo 'class="btn-danger"><span class="glyphicon glyphicon glyphicon-remove"></span>Broadway not live' ;} ?>
           </button>
-          <button type="button" <?php if($streamAvailable){echo 'class="btn btn-default"><span class="glyphicon glyphicon glyphicon-ok"></span> Stream available';}else{echo 'class="btn btn-danger"><span class="glyphicon glyphicon glyphicon-remove"></span> Stream in use' ;}  ?> 
+          <button type="button" id="streamStatus" <?php if($streamAvailable){echo 'class="btn btn-default"><span class="glyphicon glyphicon glyphicon-ok"></span> Stream available';}else{echo 'class="btn btn-danger"><span class="glyphicon glyphicon glyphicon-remove"></span> Stream in use' ;}  ?> 
           </button>
         </div>
         <br><br>
