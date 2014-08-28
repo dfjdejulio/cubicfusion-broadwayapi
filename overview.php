@@ -6,8 +6,8 @@ $Broadway = new BroadwayAPI();
 
 $listings 	= $Broadway->getChannelListing();
 $config 	= parse_ini_file("config.ini");
-$extras 	= parse_ini_file("config.ini",1);
-$rename		= $extras['rename'];
+$rename 	= parse_ini_file("rename.ini");
+
 
 $streamAvailable 	= $Broadway->isStreamAvailable();
 $broadwayAvailable 	= $Broadway->checkForBroadway();
