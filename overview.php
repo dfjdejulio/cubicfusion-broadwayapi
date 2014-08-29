@@ -18,11 +18,14 @@ if(!empty($_POST['action'])){
 	switch($_POST['action']){
 	case "save_rename":
 		header("content-type:application/json");
-		$ini = ";Rename channels\n";
+		$ini = "<?php\n #Rename channels\n\n return array(\n\n";
+		
 		foreach($_POST['rename'] as $key => $val){
-			$ini .=	$key." = ".$val."\n";
+				if(!empty($val)) $ini .=	"'".utf8_decode($key)."' => '".$val."',\n";
+		
 		}
-		file_put_contents("rename.ini", $ini);
+		$ini .= "\n\n);";
+		file_put_contents("resources/rename.php", $ini);
 		$return['done'] = 1;
 		$return["json"] = json_encode($return);
 		echo json_encode($return);
@@ -30,14 +33,17 @@ if(!empty($_POST['action'])){
 	break;
 	case "save_config":
 		header("content-type:application/json");
-		$ini = ";Configuration\n";
-		foreach($_POST['rename'] as $key => $val){
-				$ini .=	"[".$key."]\n";
-			foreach($val as $item => $item_val){
-				$ini .=	$item." = ".$item_val."\n";
-			}
+		
+		$ini = "<?php\n #BroadwayAPI configuration\n\n return array(\n\n";
+		
+		foreach($_POST['config'] as $key => $val){
+				if(!empty($val)) $ini .=	"'".utf8_decode($key)."' => '".$val."',\n";
+		
 		}
-		file_put_contents("config.ini", $ini);
+		$ini .= "\n\n);";
+		
+		file_put_contents("resources/config.php", $ini);
+		
 		$return['done'] = 1;
 		$return["json"] = json_encode($return);
 		echo json_encode($return);
@@ -96,6 +102,28 @@ $( document ).ready(function() {
     }, dataType: "json"});
 }, 5000);
 */
+
+var delay = (function(){
+  var timer = 0;
+  return function(callback, ms){
+    clearTimeout (timer);
+    timer = setTimeout(callback, ms);
+  };
+})();
+
+  $("#logoForm").on("keyup",function(){
+	 var sdata =$("#logoForm").serialize() 
+	 delay(function(){
+	 $.ajax({
+  		url: "overview.php",
+		type: 'post',
+        data: sdata+"&action=save_rename"
+	  }).done(function(data,status) {
+ 		if(data.done == 1) $(".spinner").hide();
+	  });}
+	  ,2000);
+	  
+	 });
   $(".updateLocalFiles").click(function(){
 	  $(".spinner").show();
 	  $.ajax({
@@ -326,9 +354,9 @@ foreach($listings as $list){
     </div>
     <div class="tab-pane" id="logos">
       <div class="jumbotron">
-        <h2>Channel Logos</h2>
+        <h2>Channel Logos</h2> <form id="logoForm">
         <table class="table table-striped">
-            <form id="logoForm">
+           
           
           <?php
 echo "<thead><tr >

@@ -2,20 +2,13 @@
 class BroadwayAPI{
 		# Broadway network IP
 		public $stream_ip		= "192.168.1.46";
+		public $user 			= 'User';
+		public $user_pin 		= '0000';
 		
 		# http://+IP+/TVC/user/data/profiles/m2ts
 		# http://+IP+/TVC/user/data/profiles/flv
-		
-		# Broadway stream profiles  / stream quality (default is empty = raw stream)
-		# m2ts. / flv.
-		#		 80k.LR              2300k.LC               2300k.MC               2000k.HD
-		# 		150k.LR              4300k.LC               4300k.MC               4000k.HD
-		# 		300k.LR              6300k.LC               6300k.MC               6000k.HD
-		# 		300k.MR             11300k.LC               8300k.MC               8000k.HD
-		# 		500k.MR             15300k.LC              15300k.MC              15000k.HD
-		# 		700k.MR
-		#		1000k.MR		     
-		public $stream_profile 	= ""; // m2ts.4000K.HD
+				     
+		public $stream_profile 	= "";
 		public $stream_caching	= 800;
 		
 		#Broadway channellist to use
@@ -24,13 +17,10 @@ class BroadwayAPI{
 		static $channels;
 		public $playlist;
 		public $epg;
+		static $channelEPG = array();	
+		
 		public $rename;
-		public $config;
-		
-		public $user = 'User';
-		public $user_pin = '0000';
-		
-		static $channelEPG = array();
+		public $config;			
 		
 		function __construct() {
 			
@@ -41,6 +31,7 @@ class BroadwayAPI{
 				
 				$this->stream_ip 		= $config["stream_ip"];
 				$this->stream_profile 	= $config["stream_profile"];
+				$this->stream_caching 	= $config["stream_caching"];
 				$this->channel_list 	= $config["channel_list"];	
 				$this->user_pin 		= $config["user_pin"];		
 			}
