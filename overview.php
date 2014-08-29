@@ -37,7 +37,7 @@ if(!empty($_POST['action'])){
 		$ini = "<?php\n #BroadwayAPI configuration\n\n return array(\n\n";
 		
 		foreach($_POST['config'] as $key => $val){
-				if(!empty($val)) $ini .=	"'".utf8_decode($key)."' => '".$val."',\n";
+				 $ini .=	"'".utf8_decode($key)."' => '".$val."',\n";
 		
 		}
 		$ini .= "\n\n);";
@@ -190,7 +190,7 @@ if(!empty($_POST['action'])){
     <div class="tab-pane" id="setting">
       <div class="jumbotron">
         <h2>Settings</h2>
-        <form role="form">
+        <form role="form" id="configForm">
           <table class="table table-striped">
             <?php
 	
@@ -200,13 +200,13 @@ if(!empty($_POST['action'])){
 			  echo "<tr>
 		<td>TV-PIN <br>
 <small>default: 0000</small></td>
-		<td><input class='form-control' type='password' value='0000'></td>		
+		<td><input class='form-control' type='password' value='0000' name='config[".$key."]'></td>		
 		</tr>";
 			  }elseif($key =="channel_list"){
 				 
 		
 		echo "<tr>
-		<td>".$key."</td><td><select class='form-control'><option value=''>Choose</option>";
+		<td>".$key."</td><td><select class='form-control' name='config[".$key."]'><option value=''>Choose</option>";
 		 foreach($listings as $list){
 			 echo "<option value='".$list->Id."'";
 			 if($var ==$list->Id) echo " selected";
@@ -220,7 +220,7 @@ if(!empty($_POST['action'])){
 				 
 		
 		echo "<tr>
-		<td>".$key."</td><td><select class='form-control'><option value=''>Choose</option>";
+		<td>".$key."</td><td><select class='form-control' name='config[".$key."]'><option value=''>Choose</option>";
 		foreach($stream_profiles['m2ts'] as $m2ts){
 			 echo "<option value='".$m2ts->Id."'";
 			 if($var ==$m2ts->Id) echo " selected";
@@ -235,7 +235,7 @@ if(!empty($_POST['action'])){
 			  else{
 echo "<tr>
 		<td>".$key."</td>
-		<td><input class='form-control' type='text' value='".$var."'></td>		
+		<td><input class='form-control' type='text' value='".$var."' name='config[".$key."]'></td>		
 		</tr>";
 			  }
 	  }

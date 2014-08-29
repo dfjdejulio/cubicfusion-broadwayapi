@@ -22,7 +22,7 @@ var delay = (function(){
   };
 })();
 $("#configForm").on("keyup",function(){
-	 var sdata =$("#logoForm").serialize() 
+	 var sdata =$("#configForm").serialize() 
 	 delay(function(){
 	 $(".spinner").show();
 	 $.ajax({
