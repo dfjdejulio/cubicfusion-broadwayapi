@@ -34,18 +34,19 @@ class BroadwayAPI{
 		
 		function __construct() {
 			
-			if(file_exists("config.ini")){
-			
-				$config = parse_ini_file("config.ini");
+			if(file_exists("resources/config.php")){
+				
+				$config = include("resources/config.php");
 				$this->config = $config;
 				
 				$this->stream_ip 		= $config["stream_ip"];
 				$this->stream_profile 	= $config["stream_profile"];
-				$this->channel_list 	= $config["channel_list"];		
+				$this->channel_list 	= $config["channel_list"];	
+				$this->user_pin 		= $config["user_pin"];		
 			}
 			
-			if(file_exists("rename.ini")){
-				$this->rename = parse_ini_file("rename.ini");
+			if(file_exists("resources/rename.php")){
+				$this->rename = include("resources/rename.php");
 			}
 		}
 		/*

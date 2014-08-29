@@ -16,6 +16,33 @@ $broadwayAvailable 	= $Broadway->checkForBroadway();
 if(!empty($_POST['action'])){
 	
 	switch($_POST['action']){
+	case "save_rename":
+		header("content-type:application/json");
+		$ini = ";Rename channels\n";
+		foreach($_POST['rename'] as $key => $val){
+			$ini .=	$key." = ".$val."\n";
+		}
+		file_put_contents("rename.ini", $ini);
+		$return['done'] = 1;
+		$return["json"] = json_encode($return);
+		echo json_encode($return);
+		exit;
+	break;
+	case "save_config":
+		header("content-type:application/json");
+		$ini = ";Configuration\n";
+		foreach($_POST['rename'] as $key => $val){
+				$ini .=	"[".$key."]\n";
+			foreach($val as $item => $item_val){
+				$ini .=	$item." = ".$item_val."\n";
+			}
+		}
+		file_put_contents("config.ini", $ini);
+		$return['done'] = 1;
+		$return["json"] = json_encode($return);
+		echo json_encode($return);
+		exit;
+	break;
 	case "build":
 		header("content-type:application/json");
 		
@@ -240,20 +267,21 @@ $( document ).ready(function() {
         <form role="form">
           <table class="table table-striped">
             <?php
-	  echo "<tr>
-		<td>USER</td>
-		<td><input class='form-control' type='text' value='User'></td>		
-		</tr>";
-		echo "<tr>
+	
+		
+	  foreach($config as $key => $var){
+		  if($key == "user_pin"){
+			  echo "<tr>
 		<td>TV-PIN <br>
 <small>default: 0000</small></td>
 		<td><input class='form-control' type='password' value='0000'></td>		
 		</tr>";
-	  foreach($config as $key => $var){
+			  }else{
 echo "<tr>
 		<td>".$key."</td>
 		<td><input class='form-control' type='text' value='".$var."'></td>		
 		</tr>";
+			  }
 	  }
 		?>
            
