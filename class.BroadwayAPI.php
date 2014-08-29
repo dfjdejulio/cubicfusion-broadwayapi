@@ -128,7 +128,7 @@ class BroadwayAPI{
                 foreach($data as $d ){
                    
                         $playlist .="#EXTINF:-1 tvg-logo=\"".$this->cleanString($d->DisplayName) .".png\", ".$this->renameChannel($d->DisplayName) ."\n";
-                        $playlist .=  "http://".$this->user.":".md5($this->user_pin)."@".$this->stream_ip."/basicauth/TVC/Preview?channel=".$d->Id . "&profile=".$this->stream_profile."\n";
+                        $playlist .=  "http://".$this->user.":".md5($this->user_pin)."@".$this->stream_ip."/basicauth/TVC/Preview?channel=".$d->Id . "&profile=".$this->stream_profile."&caching=".$this->stream_caching."\n";
 				}
 				
 			// Add radio in the future
@@ -231,7 +231,7 @@ class BroadwayAPI{
 			
 			$data = $this->getChannels(false);
 			
-			$url =  "http://".$this->user.":".md5($this->user_pin)."@".$this->stream_ip."/basicauth/TVC/Preview?channel=".$data[0]->Id . "&profile=".$this->stream_profile."&caching=".$this->stream_caching; 
+			$url =  "http://".$this->user.":".md5($this->user_pin)."@".$this->stream_ip."/basicauth/TVC/Preview?channel=".$data[0]->Id . "&profile=".$this->stream_profile; 
 						
 			switch($this->getResponseCode($url)){
 				case 200:

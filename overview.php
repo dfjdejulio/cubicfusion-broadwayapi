@@ -81,115 +81,13 @@ if(!empty($_POST['action'])){
 <html lang="en">
 <head>
 <title>BroadwayAPI (PHP)</title>
-<script src="//code.jquery.com/jquery-1.11.0.min.js"></script>
-<script src="//code.jquery.com/jquery-migrate-1.2.1.min.js"></script>
 <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
 <link rel="stylesheet" href="http://bootswatch.com/flatly/bootstrap.min.css">
+<link rel="stylesheet" href="recources/css/main.css">
+<script src="//code.jquery.com/jquery-1.11.0.min.js"></script>
+<script src="//code.jquery.com/jquery-migrate-1.2.1.min.js"></script>
 <script src="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
-<script language="javascript">
-$( document ).ready(function() {
- /*
-  setInterval(function(){
-    $.ajax({ url: "overview.php", type: 'post',
-        data: {'action': 'check_stream'}, success: function(data){
-      
-	   if(data.streamAvailable == true){
-		   	$("#streamStatus").addClass("btn-default").removeClass("btn-danger").text('<span class="glyphicon glyphicon glyphicon-ok"></span> Stream available'+data.streamAvailable);
-	   }else{
-	   	$("#streamStatus").addClass("btn-danger").removeClass("btn-default").text('<span class="glyphicon glyphicon glyphicon-remove"></span> Stream in use'+data.streamAvailable);
-	   }
-        
-    }, dataType: "json"});
-}, 5000);
-*/
-
-var delay = (function(){
-  var timer = 0;
-  return function(callback, ms){
-    clearTimeout (timer);
-    timer = setTimeout(callback, ms);
-  };
-})();
-
-  $("#logoForm").on("keyup",function(){
-	 var sdata =$("#logoForm").serialize() 
-	 delay(function(){
-	 $.ajax({
-  		url: "overview.php",
-		type: 'post',
-        data: sdata+"&action=save_rename"
-	  }).done(function(data,status) {
- 		if(data.done == 1) $(".spinner").hide();
-	  });}
-	  ,2000);
-	  
-	 });
-  $(".updateLocalFiles").click(function(){
-	  $(".spinner").show();
-	  $.ajax({
-  		url: "overview.php",
-		type: 'post',
-        data: {'action': 'build'}
-	  }).done(function(data,status) {
- 		if(data.done == 1) $(".spinner").hide();
-	  });
-  })
- 
-});
-
-</script>
-<style>
-.spinner {
-	margin: 50px auto;
-	width: 50px;
-	height: 30px;
-	text-align: center;
-	font-size: 10px;
-	display: none;
-}
-.spinner > div {
-	background-color: #333;
-	height: 100%;
-	width: 6px;
-	display: inline-block;
-	-webkit-animation: stretchdelay 1.2s infinite ease-in-out;
-	animation: stretchdelay 1.2s infinite ease-in-out;
-}
-.spinner .rect2 {
-	-webkit-animation-delay: -1.1s;
-	animation-delay: -1.1s;
-}
-.spinner .rect3 {
-	-webkit-animation-delay: -1.0s;
-	animation-delay: -1.0s;
-}
-.spinner .rect4 {
-	-webkit-animation-delay: -0.9s;
-	animation-delay: -0.9s;
-}
-.spinner .rect5 {
-	-webkit-animation-delay: -0.8s;
-	animation-delay: -0.8s;
-}
- @-webkit-keyframes stretchdelay {
- 0%, 40%, 100% {
--webkit-transform: scaleY(0.4)
-}
- 20% {
--webkit-transform: scaleY(1.0)
-}
-}
- @keyframes stretchdelay {
- 0%, 40%, 100% {
- transform: scaleY(0.4);
- -webkit-transform: scaleY(0.4);
-}
-20% {
- transform: scaleY(1.0);
- -webkit-transform: scaleY(1.0);
-}
-}
-</style>
+<script src="resources/js/main.js"></script>
 </head>
 <body><br>
 <div class="container">
@@ -304,7 +202,37 @@ var delay = (function(){
 <small>default: 0000</small></td>
 		<td><input class='form-control' type='password' value='0000'></td>		
 		</tr>";
-			  }else{
+			  }elseif($key =="channel_list"){
+				 
+		
+		echo "<tr>
+		<td>".$key."</td><td><select class='form-control'><option value=''>Choose</option>";
+		 foreach($listings as $list){
+			 echo "<option value='".$list->Id."'";
+			 if($var ==$list->Id) echo " selected";
+			 echo">".$list->DisplayName."</option>";
+		}
+		echo"</select></td>		
+		</tr>";
+		
+				  }
+				  elseif($key =="stream_profile"){
+				 
+		
+		echo "<tr>
+		<td>".$key."</td><td><select class='form-control'><option value=''>Choose</option>";
+		foreach($stream_profiles['m2ts'] as $m2ts){
+			 echo "<option value='".$m2ts->Id."'";
+			 if($var ==$m2ts->Id) echo " selected";
+			 echo">".$m2ts->Id." / ".$m2ts->{'Video.Bitrate'}."</option>";
+		}
+		
+		echo"</select></td>		
+		</tr>";
+		
+				  }
+			  
+			  else{
 echo "<tr>
 		<td>".$key."</td>
 		<td><input class='form-control' type='text' value='".$var."'></td>		
@@ -406,6 +334,6 @@ foreach($listings as $list){
   <br>
   <br>
 </div>
-<script>$('.navbar-nav li').tooltip();</script>
+
 </body>
 </html>
