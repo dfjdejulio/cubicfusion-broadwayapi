@@ -26,8 +26,10 @@ class BroadwayAPI{
 		public $epg;
 		public $rename;
 		public $config;
+		
 		public $user = 'User';
 		public $user_pin = '0000';
+		
 		static $channelEPG = array();
 		
 		function __construct() {
@@ -42,7 +44,7 @@ class BroadwayAPI{
 				$this->channel_list 	= $config["channel_list"];		
 			}
 			
-			if(file_exists("config.ini")){
+			if(file_exists("rename.ini")){
 				$this->rename = parse_ini_file("rename.ini");
 			}
 		}
@@ -51,8 +53,8 @@ class BroadwayAPI{
 		*/
 		function getStreamProfiles(){
 			
-			$m2ts =  $this->getData("http://".$this->user.":".md5($this->user_pin)."@".$this->stream_ip."/TVC/user/data/profiles/m2ts");
-			$flv =  $this->getData("http://".$this->user.":".md5($this->user_pin)."@".$this->stream_ip."/TVC/user/data/profiles/flv");
+			$m2ts 	=  $this->getData("http://".$this->user.":".md5($this->user_pin)."@".$this->stream_ip."/TVC/user/data/profiles/m2ts");
+			$flv 	=  $this->getData("http://".$this->user.":".md5($this->user_pin)."@".$this->stream_ip."/TVC/user/data/profiles/flv");
 			
 			return array('m2ts' => $m2ts,
 						 'flv'  => $flv);	
