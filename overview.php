@@ -4,10 +4,11 @@ include("class.BroadwayAPI.php");
 
 $Broadway = new BroadwayAPI();
 
-$listings 	= $Broadway->getChannelListing();
-$config 	= $Broadway->config;
-$rename 	= $Broadway->rename;
+$listings 			= $Broadway->getChannelListing();
+$config 			= $Broadway->config;
+$rename 			= $Broadway->rename;
 
+$stream_profiles 	= $Broadway->getStreamProfiles();
 
 $streamAvailable 	= $Broadway->isStreamAvailable();
 $broadwayAvailable 	= $Broadway->checkForBroadway();
@@ -191,6 +192,46 @@ $( document ).ready(function() {
               <td><input class='form-control' type='text' value='http://<?php echo $_SERVER["SERVER_NAME"]; ?>/broadway_epg.xml'></td>
             </tr>
         </table>
+         <br><br>
+         <h2>Stream-Profiles m2ts</h2>
+         <table class="table table-striped">
+          <thead>
+          <tr>
+              <th>ID</th>
+               <th>Video Bitrate</th>
+               <th>Audio Bitrate</th>
+              <th>Dimension</th>
+            </tr>
+            </thead>
+		 <?php foreach($stream_profiles['m2ts'] as $m2ts){?>
+         <tr>
+              <td><?php echo $m2ts->Id; ?></td>
+               <td><?php echo $m2ts->{'Video.Bitrate'}; ?></td>
+               <td><?php echo $m2ts->{'Audio.Bitrate'}; ?></td>
+              <td><?php echo $m2ts->{'Width'}; ?>x<?php echo $m2ts->{'Height'}; ?></td>
+            </tr>
+           <?php }?>
+        </table>
+        <br><br>
+         <h2>Stream-Profiles flv</h2>
+         <table class="table table-striped">
+          <thead>
+          <tr>
+              <th>ID</th>
+               <th>Video Bitrate</th>
+               <th>Audio Bitrate</th>
+              <th>Dimension</th>
+            </tr>
+            </thead>
+		 <?php foreach($stream_profiles['flv'] as $m2ts){?>
+         <tr>
+              <td><?php echo $m2ts->Id; ?></td>
+               <td><?php echo $m2ts->{'Video.Bitrate'}; ?></td>
+               <td><?php echo $m2ts->{'Audio.Bitrate'}; ?></td>
+              <td><?php echo $m2ts->{'Width'}; ?>x<?php echo $m2ts->{'Height'}; ?></td>
+            </tr>
+           <?php }?>
+        </table>
       </div>
     </div>
     <div class="tab-pane" id="setting">
@@ -199,6 +240,15 @@ $( document ).ready(function() {
         <form role="form">
           <table class="table table-striped">
             <?php
+	  echo "<tr>
+		<td>USER</td>
+		<td><input class='form-control' type='text' value='User'></td>		
+		</tr>";
+		echo "<tr>
+		<td>TV-PIN <br>
+<small>default: 0000</small></td>
+		<td><input class='form-control' type='password' value='0000'></td>		
+		</tr>";
 	  foreach($config as $key => $var){
 echo "<tr>
 		<td>".$key."</td>
@@ -274,10 +324,10 @@ foreach($listings as $list){
 		
 		<td colspan='2'>";
 			echo '<h4>'.utf8_decode($channel->DisplayName).'</h4>
-<small>[ID: '.$channel->Id.']</small><br>
+<small>[ID: '.$channel->Id.' / '.$Broadway->cleanString($channel->DisplayName) .'.png]</small><br>
 <input class="form-control" type="text" name="rename['.$channel->DisplayName.']" value="'.$rename[$channel->DisplayName].'" placeholder="Rename"></td>';
 			if(file_exists($config['channel_logos'].$Broadway->cleanString($channel->DisplayName) .".png")){
-			echo 	"<td class='active'><img width='80' src='/".$config['channel_logos'].$Broadway->cleanString($channel->DisplayName) .".png'></td>";
+			echo 	"<td class='active'><center><img width='80' src='/".$config['channel_logos'].$Broadway->cleanString($channel->DisplayName) .".png'></center></td>";
 			}else{
 				echo 	"<td class='danger'>Missing: ".$Broadway->cleanString($channel->DisplayName) .".png</td>";
 				}

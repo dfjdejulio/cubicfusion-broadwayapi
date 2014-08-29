@@ -3,8 +3,11 @@ class BroadwayAPI{
 		# Broadway network IP
 		public $stream_ip		= "192.168.1.46";
 		
+		# http://+IP+/TVC/user/data/profiles/m2ts
+		# http://+IP+/TVC/user/data/profiles/flv
+		
 		# Broadway stream profiles  / stream quality (default is empty = raw stream)
-		# m2ts.
+		# m2ts. / flv.
 		#		 80k.LR              2300k.LC               2300k.MC               2000k.HD
 		# 		150k.LR              4300k.LC               4300k.MC               4000k.HD
 		# 		300k.LR              6300k.LC               6300k.MC               6000k.HD
@@ -13,6 +16,7 @@ class BroadwayAPI{
 		# 		700k.MR
 		#		1000k.MR		     
 		public $stream_profile 	= ""; // m2ts.4000K.HD
+		public $stream_caching	= 800;
 		
 		#Broadway channellist to use
 		public $channel_list	= 1;
@@ -22,6 +26,8 @@ class BroadwayAPI{
 		public $epg;
 		public $rename;
 		public $config;
+		public $user = 'User';
+		public $user_pin = '0000';
 		static $channelEPG = array();
 		
 		function __construct() {
@@ -41,14 +47,26 @@ class BroadwayAPI{
 			}
 		}
 		/*
+			Load Broadway profiles
+		*/
+		function getStreamProfiles(){
+			
+			$m2ts =  $this->getData("http://".$this->user.":".md5($this->user_pin)."@".$this->stream_ip."/TVC/user/data/profiles/m2ts");
+			$flv =  $this->getData("http://".$this->user.":".md5($this->user_pin)."@".$this->stream_ip."/TVC/user/data/profiles/flv");
+			
+			return array('m2ts' => $m2ts,
+						 'flv'  => $flv);	
+		}
+		
+		/*
 			Load Broadway channel listing / JSON
 		*/
 		function getChannelListing(){
-			$listing =  $this->getData("http://".$this->stream_ip."/TVC/user/data/tv/channellists/");	
+			$listing =  $this->getData("http://".$this->user.":".md5($this->user_pin)."@".$this->stream_ip."/TVC/user/data/tv/channellists/");	
 			
 			foreach($listing as $list){
 			
-				$list->Items =  $this->getData("http://".$this->stream_ip."/TVC/user/data/tv/channellists/".$list->Id);	
+				$list->Items =  $this->getData("http://".$this->user.":".md5($this->user_pin)."@".$this->stream_ip."/TVC/user/data/tv/channellists/".$list->Id);	
 				$data[] = $list;	
 			}
 			return $data;
@@ -58,7 +76,7 @@ class BroadwayAPI{
 			Load Broadway Channellist / JSON
 		*/
 		function getChannelList(){
-			return $this->getData("http://".$this->stream_ip."/TVC/user/data/tv/channellists/".$this->channel_list);	
+			return $this->getData("http://".$this->user.":".md5($this->user_pin)."@".$this->stream_ip."/TVC/user/data/tv/channellists/".$this->channel_list);	
 		}
 		
 		/*
@@ -69,7 +87,7 @@ class BroadwayAPI{
 			if ($this->channelEPG[$id] !== NULL  )
         		return $this->channelEPG[$id];
 			
-			$data = $this->getData("http://".$this->stream_ip."/TVC/user/data/epg/?ids=" .$id.  "&extended=1");
+			$data = $this->getData("http://".$this->user.":".md5($this->user_pin)."@".$this->stream_ip."/TVC/user/data/epg/?ids=" .$id.  "&extended=1");
 			
 			$this->channelEPG[$id] = $data;
 			
@@ -116,7 +134,7 @@ class BroadwayAPI{
                 foreach($data as $d ){
                    
                         $playlist .="#EXTINF:-1 tvg-logo=\"".$this->cleanString($d->DisplayName) .".png\", ".$this->renameChannel($d->DisplayName) ."\n";
-                        $playlist .=  "http://".$this->stream_ip."/basicauth/TVC/Preview?channel=".$d->Id . "&profile=".$this->stream_profile."\n";
+                        $playlist .=  "http://".$this->user.":".md5($this->user_pin)."@".$this->stream_ip."/basicauth/TVC/Preview?channel=".$d->Id . "&profile=".$this->stream_profile."\n";
 				}
 				
 			// Add radio in the future
@@ -202,7 +220,7 @@ class BroadwayAPI{
 		
 		function checkForBroadway(){		
 			
-			$url =  "http://".$this->stream_ip."/TVC/user/data/tv/channellists"; 
+			$url =  "http://".$this->user.":".md5($this->user_pin)."@".$this->stream_ip."/TVC/user/data/tv/channellists"; 
 						
 			switch($this->getResponseCode($url)){
 				case 200:
@@ -219,7 +237,7 @@ class BroadwayAPI{
 			
 			$data = $this->getChannels(false);
 			
-			$url =  "http://".$this->stream_ip."/basicauth/TVC/Preview?channel=".$data[0]->Id . "&profile=".$this->stream_profile.""; 
+			$url =  "http://".$this->user.":".md5($this->user_pin)."@".$this->stream_ip."/basicauth/TVC/Preview?channel=".$data[0]->Id . "&profile=".$this->stream_profile."&caching=".$this->stream_caching; 
 						
 			switch($this->getResponseCode($url)){
 				case 200:
