@@ -92,7 +92,7 @@ if(!empty($_POST['action'])){
 <script src="/resources/js/main.js"></script>
 </head>
 <body><br>
-<div class="container"> <img src="/resources/images/logo.jpg">
+<div class="container"> <img src="/resources/images/logo.jpg" width="400">
   <div class="navbar navbar-default" role="navigation">
     <div class="container-fluid">
    
@@ -101,13 +101,21 @@ if(!empty($_POST['action'])){
        </div>
       <div class="navbar-collapse collapse">
         <ul class="nav navbar-nav">
-          <li data-toggle="tooltip" data-placement="bottom" title="Broadway LiveTV"><a href="http://<?php echo $Broadway->stream_ip; ?>" target="_blank">LiveTV</a></li>
-          <li data-toggle="tooltip" data-placement="bottom" title="Broadway Administration"><a href="http://<?php echo $Broadway->stream_ip; ?>/TVC.1343/ui/broadway/Admin.html" target="_blank">Admin</a></li>
-          <li data-toggle="tooltip" data-placement="bottom" title="Broadway Settings"><a href="http://<?php echo $Broadway->stream_ip; ?>/TVC.1343/ui/Settings.html" target="_blank">Settings</a></li>
+      <li class="dropdown">
+    <a class="dropdown-toggle" data-toggle="dropdown" href="#">
+      Broadway <span class="caret"></span>
+    </a>
+    <ul class="dropdown-menu" role="menu">
+    <li><a href="http://<?php echo $Broadway->stream_ip; ?>" target="_blank">LiveTV</a></li>
+          <li ><a href="http://<?php echo $Broadway->stream_ip; ?>/TVC.1343/ui/broadway/Admin.html" target="_blank">Admin</a></li>
+          <li ><a href="http://<?php echo $Broadway->stream_ip; ?>/TVC.1343/ui/Settings.html" target="_blank">Settings</a></li>
+    </ul>
+  </li>
+          
           <li data-toggle="tooltip" data-placement="bottom" title="Update Playlist & EPG files"><a href="#" class="updateLocalFiles">Update Files</a></li>
         </ul>
         <ul class="nav navbar-nav navbar-right">
-          <li ><a href="https://bitbucket.org/portalzine/broadwayapi/overview" target="_blank">Repository</a></li>
+          <li ><a href="https://bitbucket.org/portalzine/cubicfusion-broadwayapi" target="_blank">Repository</a></li>
         </ul>
       </div>
     </div>
@@ -383,8 +391,8 @@ foreach($listings as $list){
       </div>
     </div>
   </div>
-  <center>
-    &copy; Copyright 2014 <a href="http://www.portalzine.de" target="_blank">portalZINE NMN / Alexander Graef. All rights reserved.
+  <center><img src="/resources/images/tai.jpg">
+    <small>&copy; Copyright 2014 <a href="http://www.portalzine.de" target="_blank">portalZINE NMN</a> / Alexander Graef. All rights reserved.</small>
   </center>
   <br>
   <br>
