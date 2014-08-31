@@ -13,6 +13,7 @@ $( document ).ready(function() {
     }, dataType: "json"});
 }, 5000);
 */
+$( ".sortable" ).sortable({ items: "tr", placeholder: "info" });
 
 var delay = (function(){
   var timer = 0;

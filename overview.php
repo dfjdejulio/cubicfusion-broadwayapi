@@ -83,9 +83,11 @@ if(!empty($_POST['action'])){
 <title>BroadwayAPI (PHP)</title>
 <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
 <link rel="stylesheet" href="/resources/css/bootstrap.min.css">
+<link rel="stylesheet" href="//code.jquery.com/ui/1.11.1/themes/smoothness/jquery-ui.css">
 <link rel="stylesheet" href="/resources/css/main.css">
 <script src="//code.jquery.com/jquery-1.11.0.min.js"></script>
 <script src="//code.jquery.com/jquery-migrate-1.2.1.min.js"></script>
+ <script src="//code.jquery.com/ui/1.11.1/jquery-ui.js"></script>
 <script src="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
 <script src="/resources/js/main.js"></script>
 </head>
@@ -121,8 +123,60 @@ if(!empty($_POST['action'])){
     <li><a href="#setting" role="tab" data-toggle="tab">Settings</a></li>
     <li><a href="#list" role="tab" data-toggle="tab">Channel Lists</a></li>
     <li><a href="#logos" role="tab" data-toggle="tab">Channels & Logos</a></li>
+    <li><a href="#add" role="tab" data-toggle="tab">Add Streams</a></li>
   </ul>
   <div class="tab-content">
+  <div class="tab-pane " id="add">
+      <div class="jumbotron">
+     <h2>Add Stream</h2>
+     <small>Add radio and video streams to your playlist.</small><br><br>
+      <form role="form" method="POST" action="">
+  <div class="form-group">
+    <label for="name">Name</label>
+    <input type="text" class="form-control" id="name" name="add[name]" placeholder="">
+  </div>
+   <div class="form-group">
+    <label for="name">Stream</label>
+    <input type="text" class="form-control" id="stream" name="add[stream]" placeholder="">
+  </div>
+   <div class="form-group">
+    <label for="name">Logo</label>
+    <input type="text" class="form-control" id="logo" name="add[logo]" placeholder="">
+  </div>
+  <div class="checkbox-inline">
+    <label>
+      <input type="radio" name="add[type]" value="video"> Video 
+    </label>
+  </div>
+   <div class="checkbox-inline" >
+    <label>
+      <input type="radio" name="add[type]" value="radio"> Radio
+    </label>
+  </div>
+  <div class="clearfix"></div><br><br>
+  <button type="submit" class="btn btn-default btn-block">Submit</button>
+</form>
+<br><hr ><br>
+ <h2>Video</h2>
+        <table class="table table-striped sortable" >
+         <tr>
+              <th>Name</th>
+              <th>Stream</th>
+              <th>Logo</th>
+            </tr>
+           
+        </table><br>
+        <h2>Radio</h2>
+        <table class="table table-striped sortable">
+         <tr>
+              <th>Name</th>
+              <th>Stream</th>
+              <th>Logo</th>
+            </tr>
+          
+        </table>
+      </div>
+    </div>
     <div class="tab-pane active" id="home">
       <div class="jumbotron">
         <h2>Status</h2>
