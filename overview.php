@@ -82,7 +82,7 @@ if(!empty($_POST['action'])){
 <head>
 <title>BroadwayAPI (PHP)</title>
 <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
-<link rel="stylesheet" href="http://bootswatch.com/flatly/bootstrap.min.css">
+<link rel="stylesheet" href="/resources/css/bootstrap.min.css">
 <link rel="stylesheet" href="/resources/css/main.css">
 <script src="//code.jquery.com/jquery-1.11.0.min.js"></script>
 <script src="//code.jquery.com/jquery-migrate-1.2.1.min.js"></script>
