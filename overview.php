@@ -92,12 +92,13 @@ if(!empty($_POST['action'])){
 <script src="/resources/js/main.js"></script>
 </head>
 <body><br>
-<div class="container">
+<div class="container"> <img src="/resources/images/logo.jpg">
   <div class="navbar navbar-default" role="navigation">
     <div class="container-fluid">
+   
       <div class="navbar-header">
         <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse"> <span class="sr-only">Toggle navigation</span> <span class="icon-bar"></span> <span class="icon-bar"></span> <span class="icon-bar"></span> </button>
-        <a class="navbar-brand" href="#">BroadwayAPI (PHP)</a> </div>
+       </div>
       <div class="navbar-collapse collapse">
         <ul class="nav navbar-nav">
           <li data-toggle="tooltip" data-placement="bottom" title="Broadway LiveTV"><a href="http://<?php echo $Broadway->stream_ip; ?>" target="_blank">LiveTV</a></li>
