@@ -92,7 +92,7 @@ if(!empty($_POST['action'])){
 <script src="/resources/js/main.js"></script>
 </head>
 <body><br>
-<div class="container"> <img src="/resources/images/logo.jpg" width="400">
+<div class="container"> <img src="/resources/images/logo.png" width="400">
   <div class="navbar navbar-default" role="navigation">
     <div class="container-fluid">
    

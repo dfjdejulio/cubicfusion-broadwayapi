@@ -177,16 +177,21 @@ class BroadwayAPI{
 									$subtitle = $split[1];
 									$cat = $split[0];
 							}
+							
+							if(empty($cat)){
+								$cat = "News";	
+							}
+							
 							$epg .="<programme start=\"".date("YmdHis",($prog->StartTime/1000))." +0200\" stop=\"".date("YmdHis",($prog->EndTime/1000))." +0200\" channel=\"".$d->Id."\">\n";                           
-							$epg .=" <title>".$prog->Title." (".$subtitle.")</title>\n";
-							$epg .=" <desc>".$prog->LongDescription."</desc>\n";
-							$epg .=" <category>".$cat ."</category>\n";
+							$epg .=" <title>".$this->xml_entities($prog->Title)." (".$this->xml_entities($subtitle).")</title>\n";
+							$epg .=" <desc>".$this->xml_entities($prog->LongDescription)."</desc>\n";
+							$epg .=" <category>".$this->xml_entities($cat) ."</category>\n";
 							$epg .="</programme>\n";	
 						}else{ 
 					   		$epg .="<programme start=\"".date("YmdHis",($prog->StartTime/1000))." +0200\" stop=\"".date("YmdHis",($prog->EndTime/1000))." +0200\" channel=\"".$d->Id."\">\n";                           
-					   		$epg .=" <title>".$prog->Title."</title>\n";
-					   		$epg .=" <desc>".$prog->LongDescription."</desc>\n";
-					   		$epg .=" <category>".$prog->ShortDescription."</category>\n";
+					   		$epg .=" <title>".$this->xml_entities($prog->Title)."</title>\n";
+					   		$epg .=" <desc>".$this->xml_entities($prog->LongDescriptio)."</desc>\n";
+					   		$epg .=" <category>".$this->xml_entities($prog->ShortDescription)."</category>\n";
 					   		$epg .="</programme>\n";
 					 	}
 					 }
@@ -292,4 +297,17 @@ class BroadwayAPI{
 			
 			return json_decode($result);
 		}
+		
+		function xml_entities($string) {
+		  return strtr(
+			  $string, 
+			  array(
+				  "<" => "&lt;",
+				  ">" => "&gt;",
+				  '"' => "&quot;",
+				  "'" => "&apos;",
+				  "&" => "&amp;",
+			  )
+		  );
+	}
 }
