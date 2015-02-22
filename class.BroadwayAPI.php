@@ -40,6 +40,16 @@ class BroadwayAPI{
 				$this->rename = include("resources/rename.php");
 			}
 		}
+		
+		/*
+			Load Config
+		*/
+		function getConfig(){
+			return $this->getData("http://".$this->user.":".md5($this->user_pin)."@".$this->stream_ip."/TVC/user/data/config");
+		}
+		function getTuners(){			
+			return $this->getData("http://".$this->user.":".md5($this->user_pin)."@".$this->stream_ip."/TVC/free/data/tuners/1");	
+		}
 		/*
 			Load Broadway profiles
 		*/
@@ -234,16 +244,8 @@ class BroadwayAPI{
 		
 		function isStreamAvailable(){
 			
-			$data = $this->getChannels(false);
-			
-			$url =  "http://".$this->user.":".md5($this->user_pin)."@".$this->stream_ip."/basicauth/TVC/Preview?channel=".$data[0]->Id . "&profile=".$this->stream_profile; 
-						
-			switch($this->getResponseCode($url)){
-				case 200:
-					return true;
-				break;
-				
-			}	
+			$tuner = $this->getTuners();
+			if($tuner->Status->TuningStatus != "Tuned") return true;
 			return false;
 		}
 		
