@@ -4,7 +4,7 @@
 return array(
 		
 	//Broadway IP
-	"stream_ip" 		=> "192.168.1.46",
+	"stream_ip" 		=> "10.0.1.7",
 	
 	// Broadway TV-PIN
 	"user_pin"			=> "0000",
